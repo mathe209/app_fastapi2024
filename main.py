@@ -71,3 +71,5 @@ def update_post(id:int,post:Schemas.PostUpdate, db: Session = Depends(get_db)):
     
     db.commit()
     return {"Successful update"}
+
+@app.get("/")
