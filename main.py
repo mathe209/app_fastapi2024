@@ -25,11 +25,11 @@ def get_db():
 @app.get("/test_get") #the data will be displayed on the font end app when the user uses the GET operation
 def get_post(db: Session = Depends(get_db)):
     posts = db.query(models.Post).all()
-    return {"data":posts}
+    return posts
     #returning a post with a specific id number
     #posts = db.query(models.Post).filter(models.Post.id==1).fist()
 
-@app.post("/create_post")
+@app.post("/create_post", response_model= Schemas.ResponseData)
 def create_entry(post: Schemas.PostBase, db: Session = Depends(get_db)):
     print(post.dict()) #converting the pydantic model to a dictionary
     #ensures that i dont have to write out all the fields when creating a post even if i enter a new field
@@ -39,7 +39,7 @@ def create_entry(post: Schemas.PostBase, db: Session = Depends(get_db)):
     db.commit()
     #db.refresh(entry) #displays the created post on the app
 
-    return {"data": entry}
+    return entry
 
 @app.get("/post/{id}")
 def get_by_id(id:int, db: Session = Depends(get_db)):
@@ -71,5 +71,3 @@ def update_post(id:int,post:Schemas.PostUpdate, db: Session = Depends(get_db)):
     
     db.commit()
     return {"Successful update"}
-
-@app.get("/")
